@@ -38,6 +38,22 @@
             position: relative;
         }
 
+        /* --- PENGATURAN IKON HIASAN --- */
+        .icon-hiasan {
+            position: absolute;
+            opacity: 0.35; /* Opacity 35% agar semi-transparan */
+            pointer-events: none; /* Agar tidak menghalangi klik tombol */
+            z-index: 2;
+        }
+
+        /* Posisi Ikon Kurori (Halaman Awal) */
+        .kurori-kiri { bottom: -20px; left: -30px; width: 130px; }
+        .kurori-kanan { top: 20px; right: 0px; width: 70px; transform: scaleX(-1); }
+
+        /* Posisi Ikon Natori (Halaman Hasil) */
+        .natori-kiri { bottom: -10px; left: -20px; width: 130px; }
+        .natori-kanan { top: 20px; right: -5px; width: 75px; transform: scaleX(-1); }
+
         /* --- HALAMAN AWAL --- */
         #layar-awal { text-align: center; padding: 40px 0; }
         #layar-awal h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
@@ -119,7 +135,7 @@
         .btn-selesai:active { transform: translateY(2px); }
         
         .btn-tutup-pembahasan {
-            background-color: #6c757d; /* Warna abu-abu yang netral */
+            background-color: #6c757d;
             margin-top: 35px;
         }
 
@@ -196,6 +212,10 @@
         
         <!-- BAGIAN 1: AWAL -->
         <div id="layar-awal">
+            <!-- Ikon Kurori disematkan di sini -->
+            <img src="icon_kurori1.png" alt="Hiasan Kurori Kiri" class="icon-hiasan kurori-kiri">
+            <img src="icon_kurori1.png" alt="Hiasan Kurori Kanan" class="icon-hiasan kurori-kanan">
+
             <h2>Latihan:<br>Konsep Mol</h2>
             <p>Waktu Pengerjaan: 20 Menit (10 Soal)</p>
             <input type="text" id="input-nama" class="input-nama" placeholder="Tulis Nama_Kelas" autocomplete="off">
@@ -236,6 +256,10 @@
 
         <!-- BAGIAN 3: HASIL PENUTUP -->
         <div id="layar-penutup">
+            <!-- Ikon Natori disematkan di sini -->
+            <img src="icon_natori1.png" alt="Hiasan Natori Kiri" class="icon-hiasan natori-kiri">
+            <img src="icon_natori1.png" alt="Hiasan Natori Kanan" class="icon-hiasan natori-kanan">
+
             <div class="nilai-label" id="teks-status-akhir">Mengirim Data...</div>
             <div id="teks-skor" style="display: none;">0%</div>
             <div class="waktu-teks" id="teks-info-tambahan"></div>
@@ -258,7 +282,6 @@
                 <!-- Konten pembahasan akan di-generate oleh JS -->
             </div>
             
-            <!-- Tombol Tutup Pembahasan Ditambahkan Di Sini -->
             <button class="btn-selesai btn-tutup-pembahasan" onclick="tutupPembahasan()">Tutup Pembahasan</button>
         </div>
 
@@ -575,20 +598,15 @@
             });
         }
         
-        // --- FITUR BARU: KEMBALI KE AWAL ---
         function tutupPembahasan() {
-            // Sembunyikan layar pembahasan dan tampilkan layar awal
             document.getElementById("layar-pembahasan").style.display = "none";
             document.getElementById("layar-awal").style.display = "block";
             
-            // Kosongkan input nama
             document.getElementById("input-nama").value = "";
             
-            // Atur ulang variabel ke kondisi awal
             indeksSoal = 0;
             sisaDetik = DURASI_KUIS;
             
-            // Acak ulang jawaban untuk persiapan jika latihan ingin diulang
             dataSoal.forEach(soal => {
                 soal.pilihanAcak = acakArray(soal.pilihan); 
                 soal.jawabanDipilih = null; 
