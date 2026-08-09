@@ -4,137 +4,207 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Latihan - Konsep Mol</title>
+    
+    <!-- Memanggil Font Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #d9f0fe;
-            color: #000000;
+        /* Pengaturan Dasar & Layout Background */
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #073763; /* Dark Azure */
+            color: #212529;
             display: flex;
             justify-content: center;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 800px;
+            align-items: center;
+            min-height: 100vh;
             padding: 20px;
-            box-sizing: border-box;
         }
 
-        /* Halaman Awal */
-        #layar-awal { text-align: center; margin-top: 100px; }
-        input[type="text"] {
-            padding: 10px; font-size: 18px; width: 80%; max-width: 400px;
-            margin: 20px 0; border: 2px solid #000; text-align: center;
+        /* Wadah Utama Bevel */
+        .main-container {
+            background-color: #e2eaf0;
+            border-radius: 33px;
+            padding: 40px;
+            width: 100%;
+            max-width: 850px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
+
+        /* --- HALAMAN AWAL --- */
+        #layar-awal { text-align: center; padding: 40px 0; }
+        #layar-awal h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 10px; }
+        #layar-awal p { font-size: 1.1rem; margin-bottom: 30px; }
+        
+        .input-nama {
+            padding: 15px 20px; font-size: 1rem; width: 100%; max-width: 350px;
+            border-radius: 25px; border: none; text-align: center; font-family: 'Montserrat', sans-serif;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 30px; outline: none;
+        }
+        
         .btn-utama {
-            padding: 12px 30px; font-size: 18px; cursor: pointer;
-            background-color: #000; color: #fff; border: none; font-weight: bold;
+            padding: 15px 45px; font-size: 1.2rem; cursor: pointer; border-radius: 25px;
+            background-color: #073763; color: #fff; border: none; font-weight: 700;
+            font-family: 'Montserrat', sans-serif; transition: transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
         }
+        .btn-utama:active { transform: translateY(2px); box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2); }
+        #pesan-resume { color: #00a651; font-weight: 700; margin-top: 15px; display: none; }
 
-        /* Tampilan Kuis Utama */
-        #layar-kuis, #layar-penutup { display: none; }
+        /* --- TAMPILAN KUIS UTAMA --- */
+        #layar-kuis, #layar-penutup, #layar-pembahasan { display: none; }
 
         /* Panel Atas: Navigasi & Timer */
         .panel-atas {
             display: flex; justify-content: space-between; align-items: flex-start;
-            margin-bottom: 20px; padding-bottom: 15px; border-bottom: 2px solid #eee;
+            margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #cbd5e1;
             flex-wrap: wrap; gap: 15px;
         }
         
-        #timer-teks { font-size: 22px; font-weight: bold; color: #d9534f; }
+        #timer-teks { font-size: 1.2rem; font-weight: 700; color: #d9534f; }
 
-        .nav-soal-container {
-            display: flex; flex-wrap: wrap; gap: 8px; max-width: 60%;
-        }
+        .nav-soal-container { display: flex; flex-wrap: wrap; gap: 8px; max-width: 65%; }
+        
         .btn-nav-soal {
-            width: 35px; height: 35px; font-size: 14px; font-weight: bold; cursor: pointer;
-            border: 2px solid #ccc; background-color: #f4f4f4; color: #333;
-            display: flex; align-items: center; justify-content: center;
+            width: 38px; height: 38px; font-size: 0.9rem; font-weight: 700; cursor: pointer;
+            border: 2px solid #cbd5e1; background-color: #ffffff; color: #333;
+            display: flex; align-items: center; justify-content: center; border-radius: 8px;
+            transition: 0.2s;
         }
-        .btn-nav-soal.dijawab { background-color: #28a745; color: white; border-color: #1e7e34; }
-        .btn-nav-soal.aktif { border: 3px solid #000; transform: scale(1.1); }
+        .btn-nav-soal.dijawab { background-color: #cbd5e1; color: #333; }
+        .btn-nav-soal.aktif { border: 3px solid #073763; transform: scale(1.1); background-color: #fff; }
 
         /* Area Soal */
-        #soal-judul { font-size: 24px; font-weight: bold; margin-bottom: 10px; }
-        #soal-teks { font-size: 18px; margin-bottom: 30px; line-height: 1.6; }
+        #soal-judul { font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; }
+        #soal-teks { font-size: 1.1rem; margin-bottom: 30px; line-height: 1.6; font-weight: 600; }
 
         /* Kotak Jawaban */
         .grid-jawaban { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .kotak-jawaban {
-            padding: 20px 10px; font-size: 18px; font-weight: bold; cursor: pointer;
-            border: 2px solid #000; display: flex; align-items: center; justify-content: center;
-            min-height: 80px; text-align: center; user-select: none; transition: 0.2s;
+            padding: 20px 15px; font-size: 1.1rem; font-weight: 700; cursor: pointer;
+            border: 3px solid transparent; display: flex; align-items: center; justify-content: center;
+            min-height: 100px; text-align: center; user-select: none; transition: 0.2s;
+            border-radius: 12px; font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        /* State saat opsi dipilih */
         .kotak-jawaban.terpilih {
-            outline: 5px solid #000; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); transform: scale(0.96);
+            border: 4px solid #000; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); transform: scale(0.97);
         }
 
-        .warna-merah { background-color: #ff4d4d; color: white; }
-        .warna-kuning { background-color: #ffd700; color: black; }
+        .warna-merah { background-color: #f05454; color: white; }
+        .warna-kuning { background-color: #ffc107; color: black; }
         .warna-hijau { background-color: #28a745; color: white; }
         .warna-biru { background-color: #007bff; color: white; }
 
         /* Tombol Bawah */
-        .panel-bawah {
-            display: flex; justify-content: space-between; margin-top: 30px; flex-wrap: wrap; gap: 10px;
-        }
+        .panel-bawah { display: flex; justify-content: space-between; margin-top: 35px; flex-wrap: wrap; gap: 10px; }
+        
         .btn-navigasi {
-            padding: 10px 20px; font-size: 16px; cursor: pointer;
-            background-color: #eee; border: 2px solid #ccc; font-weight: bold;
+            padding: 12px 25px; font-size: 1rem; cursor: pointer; font-family: 'Montserrat', sans-serif;
+            background-color: #ffffff; border: 2px solid #cbd5e1; font-weight: 700; border-radius: 8px;
         }
         .btn-selesai {
-            padding: 10px 20px; font-size: 16px; cursor: pointer;
-            background-color: #28a745; color: white; border: 2px solid #1e7e34; font-weight: bold;
-            width: 100%; margin-top: 15px;
+            padding: 15px 20px; font-size: 1.1rem; cursor: pointer; border-radius: 12px;
+            background-color: #00a651; color: white; border: none; font-weight: 700;
+            width: 100%; margin-top: 20px; font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); transition: transform 0.1s ease;
+        }
+        .btn-selesai:active { transform: translateY(2px); }
+        
+        .btn-tutup-pembahasan {
+            background-color: #6c757d; /* Warna abu-abu yang netral */
+            margin-top: 35px;
         }
 
         /* Modal Konfirmasi */
         .overlay-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 100;
+            background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100;
         }
         .kotak-modal {
-            background: white; padding: 30px; border-radius: 8px; text-align: center; max-width: 400px;
+            background: #e2eaf0; padding: 40px; border-radius: 25px; text-align: center; max-width: 450px; width: 90%;
         }
-        .kotak-modal h3 { margin-top: 0; }
-        .grup-tombol-modal { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-        .btn-batal { padding: 10px 15px; background: #6c757d; color: white; border: none; cursor: pointer; font-weight: bold; }
-        .btn-yakin { padding: 10px 15px; background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; }
+        .kotak-modal h3 { margin-top: 0; font-size: 1.4rem; font-weight: 800; margin-bottom: 15px; }
+        .grup-tombol-modal { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+        .btn-batal, .btn-yakin {
+            padding: 12px 20px; border: none; cursor: pointer; font-weight: 700; border-radius: 12px; font-family: 'Montserrat', sans-serif;
+        }
+        .btn-batal { background: #6c757d; color: white; }
+        .btn-yakin { background: #00a651; color: white; }
 
-        /* Halaman Penutup & Sertifikat */
-        #layar-penutup { text-align: center; margin-top: 50px; }
+        /* --- HALAMAN PENUTUP (HASIL) --- */
+        #layar-penutup { text-align: center; padding: 20px 0; }
+        .nilai-label { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; }
+        #teks-skor { font-size: 4.5rem; font-weight: 800; line-height: 1; margin-bottom: 15px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
+        .waktu-teks { font-size: 1.1rem; font-weight: 400; margin-bottom: 25px; }
+
         .kotak-bukti {
-            border: 3px dashed #000; padding: 20px; margin-top: 20px; background-color: #f9f9f9; display: none;
+            border: 3px dashed #000; padding: 20px; margin: 0 auto 30px auto; max-width: 450px; background-color: transparent; display: none;
         }
-        .teks-token { font-size: 36px; letter-spacing: 5px; color: #d9534f; margin: 10px 0; font-family: monospace; font-weight: bold; }
-        .pesan-screenshot { font-size: 16px; font-weight: bold; color: #007bff; margin-top: 15px; display: none; }
+        .bukti-title { font-size: 1rem; font-weight: 700; margin-bottom: 15px; }
+        .teks-token { font-size: 2rem; font-weight: 700; color: #d9534f; letter-spacing: 5px; margin-bottom: 15px; }
+        .bukti-detail { font-size: 0.9rem; font-weight: 600; line-height: 1.5; }
         
-        /* Pesan Lanjutan (Resume) */
-        #pesan-resume { color: #28a745; font-weight: bold; margin-top: 10px; display: none; }
+        .pesan-screenshot { font-size: 1rem; font-weight: 700; color: #073763; margin-top: 15px; display: none; margin-bottom: 30px;}
+        
+        .btn-pembahasan {
+            background-color: #00a651; color: #ffffff; border: none; border-radius: 12px;
+            padding: 15px 30px; font-family: 'Montserrat', sans-serif; font-size: 1.2rem;
+            font-weight: 700; cursor: pointer; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s ease; display: none; margin: 0 auto;
+        }
+        .btn-pembahasan:active { transform: translateY(2px); }
+
+        /* --- HALAMAN PEMBAHASAN --- */
+        #layar-pembahasan { text-align: left; max-height: 80vh; overflow-y: auto; padding-right: 10px; }
+        #layar-pembahasan h2 { text-align: center; font-weight: 800; margin-bottom: 30px; font-size: 2rem; }
+        .item-pembahasan {
+            background-color: #ffffff; border-radius: 15px; padding: 25px; margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .item-pembahasan h4 { font-size: 1.2rem; font-weight: 800; color: #073763; margin-bottom: 10px; border-bottom: 2px solid #e2eaf0; padding-bottom: 5px; }
+        .teks-soal-pembahasan { font-size: 1.05rem; font-weight: 600; margin-bottom: 15px; line-height: 1.6; }
+        .jawaban-benar { font-size: 1rem; color: #00a651; font-weight: 700; margin-bottom: 15px; }
+        .teks-penjelasan { font-size: 0.95rem; line-height: 1.6; background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; }
+        
+        /* Modifikasi Scrollbar */
+        #layar-pembahasan::-webkit-scrollbar { width: 8px; }
+        #layar-pembahasan::-webkit-scrollbar-track { background: #e2eaf0; border-radius: 10px; }
+        #layar-pembahasan::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        #layar-pembahasan::-webkit-scrollbar-thumb:hover { background: #073763; }
 
         /* Mobile responsif */
         @media (max-width: 600px) {
             .grid-jawaban { grid-template-columns: 1fr; }
             .panel-atas { flex-direction: column-reverse; align-items: center; }
             .nav-soal-container { max-width: 100%; justify-content: center; }
+            .main-container { padding: 25px 20px; border-radius: 25px; }
+            .btn-utama, .btn-selesai, .btn-pembahasan { font-size: 1rem; width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <div class="main-container">
+        
+        <!-- BAGIAN 1: AWAL -->
         <div id="layar-awal">
-            <h2>Latihan: Konsep Mol</h2>
+            <h2>Latihan:<br>Konsep Mol</h2>
             <p>Waktu Pengerjaan: 20 Menit (10 Soal)</p>
-            <input type="text" id="input-nama" placeholder="Tulis Nama_Kelas" autocomplete="off">
+            <input type="text" id="input-nama" class="input-nama" placeholder="Tulis Nama_Kelas" autocomplete="off">
             <br>
             <button class="btn-utama" onclick="mulaiKuis()">Mulai Latihan</button>
             <p id="pesan-resume">Latihan sebelumnya ditemukan. Melanjutkan...</p>
         </div>
 
+        <!-- BAGIAN 2: KUIS -->
         <div id="layar-kuis">
             <div class="panel-atas">
                 <div class="nav-soal-container" id="wadah-navigasi"></div>
@@ -152,59 +222,135 @@
             <button class="btn-selesai" onclick="bukaModalKonfirmasi()">Selesaikan Latihan</button>
         </div>
 
+        <!-- MODAL KONFIRMASI -->
         <div class="overlay-modal" id="modal-konfirmasi">
             <div class="kotak-modal">
-                <h3>Apakah anda yakin untuk menyelesaikan latihan?</h3>
-                <p>Pastikan cek kembali jawaban anda. Data akan dikirim dan tidak dapat diubah lagi.</p>
+                <h3>Yakin untuk menyelesaikan latihan?</h3>
+                <p style="font-weight: 500; font-size: 0.95rem;">Pastikan cek kembali jawaban anda. Data akan dikirim dan tidak dapat diubah lagi.</p>
                 <div class="grup-tombol-modal">
-                    <button class="btn-batal" onclick="tutupModal()">Tidak, Kembali ke latihan</button>
-                    <button class="btn-yakin" onclick="prosesSelesai()">Iya, Selesaikan Latihan</button>
+                    <button class="btn-batal" onclick="tutupModal()">Kembali</button>
+                    <button class="btn-yakin" onclick="prosesSelesai()">Selesaikan</button>
                 </div>
             </div>
         </div>
 
+        <!-- BAGIAN 3: HASIL PENUTUP -->
         <div id="layar-penutup">
-            <h2 id="teks-status-akhir">Mengirim Data...</h2>
-            <p id="teks-skor" style="font-size: 54px; font-weight: bold; display: none; margin: 10px 0;">0%</p>
-            <p id="teks-info-tambahan"></p>
+            <div class="nilai-label" id="teks-status-akhir">Mengirim Data...</div>
+            <div id="teks-skor" style="display: none;">0%</div>
+            <div class="waktu-teks" id="teks-info-tambahan"></div>
 
             <div id="wadah-bukti" class="kotak-bukti">
-                <p style="margin: 0; font-weight: bold; font-size: 18px;">BUKTI PENYELESAIAN</p>
+                <div class="bukti-title">BUKTI PENYELESAIAN</div>
                 <div id="teks-token-tampil" class="teks-token">-----</div>
-                <p style="font-size: 14px; margin: 5px 0;">Nama: <strong id="tampil-nama-siswa">-</strong></p>
-                <p style="font-size: 14px; margin: 5px 0;">Waktu Selesai: <span id="tampil-timestamp">-</span></p>
+                <div class="bukti-detail">Nama: <span id="tampil-nama-siswa">-</span></div>
+                <div class="bukti-detail">Waktu Selesai: <span id="tampil-timestamp">-</span></div>
             </div>
             
-            <p id="pesan-screenshot" class="pesan-screenshot">📸 Silakan screenshot halaman ini dan serahkan kepada guru!</p>
+            <div id="pesan-screenshot" class="pesan-screenshot">📸 Silakan screenshot halaman ini sebagai bukti!</div>
+            <button type="button" id="btn-pembahasan" class="btn-pembahasan" onclick="tampilkanPembahasanScreen()">Lihat Pembahasan</button>
         </div>
+
+        <!-- BAGIAN 4: PEMBAHASAN -->
+        <div id="layar-pembahasan">
+            <h2>Pembahasan Soal</h2>
+            <div id="wadah-pembahasan-konten">
+                <!-- Konten pembahasan akan di-generate oleh JS -->
+            </div>
+            
+            <!-- Tombol Tutup Pembahasan Ditambahkan Di Sini -->
+            <button class="btn-selesai btn-tutup-pembahasan" onclick="tutupPembahasan()">Tutup Pembahasan</button>
+        </div>
+
     </div>
 
+    <!-- LOGIKA JAVASCRIPT -->
     <script>
-        // --- KONFIGURASI URL APPS SCRIPT ---
-        const urlGAS = "https://script.google.com/macros/s/AKfycbx6R2NUFOQP000rsx94lzRcVmpv1fWrN2Ybs0_efwCjTlJ9PTBPJ6NhpdMwNzlrW3kZ/exec"; 
+        const urlGAS = "https://script.google.com/macros/s/AKfycbxV9eBb40xlH0kb7z2bn7BLSXLFsY6QTxI8UkptKXTEADmg3gmfbfwGPqsum347oIbB/exec"; 
         
-        const DURASI_KUIS = 20 * 60; // 20 Menit dalam detik
-        const KUNCI_STORAGE = "kuis_konsep_mol_save"; // Kunci spesifik untuk memori kuis ini
+        const DURASI_KUIS = 20 * 60; // 20 Menit
+        const KUNCI_STORAGE = "kuis_konsep_mol_save";
 
         const dataSoal = [
-            { teks: "Satuan jumlah partikel dalam kimia adalah …", pilihan: [{t: "Gram", b: false}, {t: "Liter", b: false}, {t: "Mol", b: true}, {t: "Atom", b: false}] },
-            { teks: "Mr dari H₂O (Ar H = 1, O = 16) adalah …", pilihan: [{t: "12", b: false}, {t: "14", b: false}, {t: "16", b: false}, {t: "18", b: true}] },
-            { teks: "Mr CO₂ (Ar C = 12, O = 16) adalah …", pilihan: [{t: "28", b: false}, {t: "32", b: false}, {t: "44", b: true}, {t: "46", b: false}] },
-            { teks: "Hubungan antara mol (n), massa (g), dan Mr adalah …", pilihan: [{t: "n = g × Mr", b: false}, {t: "n = g / Mr", b: true}, {t: "n = Mr / g", b: false}, {t: "n = g + Mr", b: false}] },
-            { teks: "Massa dari 2 mol O₂ (Mr = 32) adalah …", pilihan: [{t: "16 gram", b: false}, {t: "32 gram", b: false}, {t: "48 gram", b: false}, {t: "64 gram", b: true}] },
-            { teks: "Jumlah mol dari 23 gram Na (Ar Na = 23) adalah …", pilihan: [{t: "0,5 mol", b: false}, {t: "1 mol", b: true}, {t: "2 mol", b: false}, {t: "23 mol", b: false}] },
-            { teks: "Jumlah molekul dalam 2 mol H₂ adalah …", pilihan: [{t: "3,01 × 10²³", b: false}, {t: "6,02 × 10²³", b: false}, {t: "1,204 × 10²⁴", b: true}, {t: "2,408 × 10²⁴", b: false}] },
-            { teks: "Mr dari CO(NH₂)₂ adalah … (Ar C = 12, O = 16, N = 14, H = 1)", pilihan: [{t: "58", b: false}, {t: "59", b: false}, {t: "60", b: true}, {t: "62", b: false}] },
-            { teks: "Jika 0,5 mol zat terlarut dilarutkan ke dalam air hingga volume larutan menjadi 2 liter, maka molaritas larutan tersebut adalah …", pilihan: [{t: "0,10 M", b: false}, {t: "0,25 M", b: true}, {t: "0,50 M", b: false}, {t: "1,00 M", b: false}] },
-            { teks: "Berapakah molaritas larutan yang dibuat dengan melarutkan 4 gram NaOH (Mr = 40) ke dalam air hingga volume larutan mencapai 250 mL?", pilihan: [{t: "0,1 M", b: false}, {t: "0,2 M", b: false}, {t: "0,4 M", b: true}, {t: "1,0 M", b: false}] }
+            { 
+                teks: "Standar internasional yang digunakan para ilmuwan saat ini sebagai dasar untuk menentukan massa atom relatif (Ar) suatu unsur adalah...", 
+                pilihan: [
+                    {t: "1/16 dari massa satu atom isotop Oksigen-16", b: false}, 
+                    {t: "1/12 dari massa satu atom isotop Karbon-12", b: true}, 
+                    {t: "1/1 dari massa satu atom isotop Hidrogen-1", b: false}, 
+                    {t: "Massa rata-rata dari seluruh isotop atom karbon di alam", b: false}
+                ],
+                pembahasan: "IUPAC menetapkan isotop Karbon-12 (C-12) sebagai standar penentuan massa atom relatif. 1 satuan massa atom (sma) didefinisikan secara eksak sebagai 1/12 dari massa satu atom isotop C-12."
+            },
+            { 
+                teks: "Tembaga di alam terdiri atas dua isotop, yaitu isotop Cu-63 dengan kelimpahan 70% dan isotop Cu-65 dengan kelimpahan 30%. Berapakah massa atom relatif (Ar) rata-rata dari unsur tembaga tersebut?", 
+                pilihan: [
+                    {t: "63,0", b: false}, {t: "63,4", b: false}, {t: "63,6", b: true}, {t: "64,2", b: false}
+                ],
+                pembahasan: "Ar Cu rata-rata = (% isotop 1 × massa isotop 1) + (% isotop 2 × massa isotop 2)\nAr Cu = (70/100 × 63) + (30/100 × 65)\nAr Cu = 44,1 + 19,5 = 63,6"
+            },
+            { 
+                teks: "Massa molekul relatif (Mr) dari senyawa asam sulfat dengan rumus kimia H₂SO₄ adalah... (Diketahui Ar H = 1, S = 32, O = 16)", 
+                pilihan: [
+                    {t: "49", b: false}, {t: "82", b: false}, {t: "98", b: true}, {t: "120", b: false}
+                ],
+                pembahasan: "Mr H₂SO₄ = (2 × Ar H) + (1 × Ar S) + (4 × Ar O)\nMr H₂SO₄ = (2 × 1) + (1 × 32) + (4 × 16)\nMr H₂SO₄ = 2 + 32 + 64 = 98"
+            },
+            { 
+                teks: "Pupuk aluminium sulfat memiliki rumus kimia Al₂(SO₄)₃. Berapakah massa molekul relatif (Mr) senyawa tersebut? (Diketahui Ar Al = 27, S = 32, O = 16)", 
+                pilihan: [
+                    {t: "150", b: false}, {t: "214", b: false}, {t: "342", b: true}, {t: "378", b: false}
+                ],
+                pembahasan: "Rumus Al₂(SO₄)₃ berarti terdapat 2 atom Al, 3 atom S, dan 12 atom O (3 × 4).\nMr Al₂(SO₄)₃ = (2 × Ar Al) + (3 × Ar S) + (12 × Ar O)\nMr Al₂(SO₄)₃ = (2 × 27) + (3 × 32) + (12 × 16)\nMr Al₂(SO₄)₃ = 54 + 96 + 192 = 342"
+            },
+            { 
+                teks: "Suatu senyawa oksida logam memiliki rumus L₂O₃. Jika massa molekul relatif (Mr) senyawa tersebut adalah 160 dan Ar O = 16, maka massa atom relatif (Ar) logam L adalah...", 
+                pilihan: [
+                    {t: "27", b: false}, {t: "56", b: true}, {t: "65", b: false}, {t: "112", b: false}
+                ],
+                pembahasan: "Mr L₂O₃ = 160\n(2 × Ar L) + (3 × Ar O) = 160\n(2 × Ar L) + (3 × 16) = 160\n(2 × Ar L) + 48 = 160\n2 × Ar L = 160 - 48\n2 × Ar L = 112\nAr L = 56"
+            },
+            { 
+                teks: "Berapakah massa dari 0,5 mol batu kapur atau kalsium karbonat (CaCO₃)? (Diketahui Ar Ca = 40, C = 12, O = 16)", 
+                pilihan: [
+                    {t: "25 gram", b: false}, {t: "50 gram", b: true}, {t: "75 gram", b: false}, {t: "100 gram", b: false}
+                ],
+                pembahasan: "Pertama, hitung Mr CaCO₃:\nMr CaCO₃ = (1 × 40) + (1 × 12) + (3 × 16) = 40 + 12 + 48 = 100\nMassa = mol × Mr\nMassa CaCO₃ = 0,5 mol × 100 gram/mol = 50 gram."
+            },
+            { 
+                teks: "Diketahui tetapan Avogadro (L) adalah 6,02 × 10²³. Jumlah molekul yang terdapat dalam 2 mol air (H₂O) adalah...", 
+                pilihan: [
+                    {t: "3,01 × 10²³", b: false}, {t: "6,02 × 10²³", b: false}, {t: "1,204 × 10²³", b: false}, {t: "1,204 × 10²⁴", b: true}
+                ],
+                pembahasan: "Jumlah molekul = mol × Tetapan Avogadro (L)\nJumlah molekul H₂O = 2 × 6,02 × 10²³\nJumlah molekul H₂O = 12,04 × 10²³ = 1,204 × 10²⁴ molekul."
+            },
+            { 
+                teks: "Volume dari 11 gram gas karbon dioksida (CO₂) jika diukur pada keadaan standar (STP) adalah... (Diketahui Ar C = 12, O = 16)", 
+                pilihan: [
+                    {t: "2,24 liter", b: false}, {t: "5,6 liter", b: true}, {t: "11,2 liter", b: false}, {t: "22,4 liter", b: false}
+                ],
+                pembahasan: "Hitung Mr CO₂: Mr CO₂ = (1 × 12) + (2 × 16) = 12 + 32 = 44\nUbah massa menjadi mol: Mol CO₂ = Massa / Mr = 11 / 44 = 0,25 mol\nHitung volume pada STP: Volume = mol × 22,4 liter/mol\nVolume = 0,25 × 22,4 = 5,6 liter."
+            },
+            { 
+                teks: "Pada suhu dan tekanan yang sama, 2 liter gas X memiliki massa 1,4 gram. Jika pada kondisi tersebut volume 3,2 gram gas O₂ (Ar O = 16) adalah 4 liter, maka massa molekul relatif (Mr) gas X adalah...", 
+                pilihan: [
+                    {t: "14", b: false}, {t: "28", b: true}, {t: "32", b: false}, {t: "44", b: false}
+                ],
+                pembahasan: "Menurut Hukum Avogadro: V₁ / n₁ = V₂ / n₂\nHitung mol O₂: Mr O₂ = 32, Mol O₂ = 3,2 / 32 = 0,1 mol\nMasukkan ke persamaan:\n(Volume X) / (Mol X) = (Volume O₂) / (Mol O₂)\n2 / Mol X = 4 / 0,1\n4 × Mol X = 0,2  =>  Mol X = 0,05 mol\nHitung Mr X: Massa X = mol × Mr X\n1,4 = 0,05 × Mr X  =>  Mr X = 28"
+            },
+            { 
+                teks: "Di antara kelompok zat berikut ini, manakah yang memiliki jumlah molekul paling banyak? (Diketahui Ar H = 1, N = 14, O = 16)", 
+                pilihan: [
+                    {t: "4 gram gas H₂", b: true}, {t: "17 gram gas NH₃", b: false}, {t: "32 gram gas O₂", b: false}, {t: "18 gram uap air (H₂O)", b: false}
+                ],
+                pembahasan: "Jumlah molekul berbanding lurus dengan jumlah mol. Zat dengan mol terbesar memiliki molekul terbanyak.\nA. Mol H₂ = 4 / 2 = 2 mol\nB. Mol NH₃ = 17 / 17 = 1 mol\nC. Mol O₂ = 32 / 32 = 1 mol\nD. Mol H₂O = 18 / 18 = 1 mol\nKarena gas H₂ memiliki jumlah mol terbesar (2 mol), ia mengandung molekul paling banyak."
+            }
         ];
 
         let namaSiswa = "";
         let indeksSoal = 0;
         let sisaDetik = DURASI_KUIS;
         let intervalTimer;
-
-        // --- SISTEM AUTO-SAVE (LOCALSTORAGE) ---
         
         window.onload = function() {
             const dataSimpanan = localStorage.getItem(KUNCI_STORAGE);
@@ -244,8 +390,6 @@
             };
             localStorage.setItem(KUNCI_STORAGE, JSON.stringify(progres));
         }
-
-        // --- LOGIKA KUIS ---
 
         function mulaiKuis() {
             namaSiswa = document.getElementById("input-nama").value.trim();
@@ -381,12 +525,12 @@
         }
 
         function tampilkanSertifikat(skor, waktu, token, ts, sukses) {
-            document.getElementById("teks-status-akhir").innerText = sukses ? "Kuis Selesai!" : "Gagal Kirim ke Server!";
+            document.getElementById("teks-status-akhir").innerText = sukses ? "Nilai anda:" : "Gagal Kirim ke Server!";
             if (!sukses) document.getElementById("teks-status-akhir").style.color = "red";
 
             document.getElementById("teks-skor").innerText = skor + "%";
             document.getElementById("teks-skor").style.display = "block";
-            document.getElementById("teks-info-tambahan").innerText = `Selesai dikerjakan dalam ${Math.floor(waktu/60)} menit ${waktu%60} detik.`;
+            document.getElementById("teks-info-tambahan").innerText = `Selesai dikerjakan dalam: ${Math.floor(waktu/60)} menit ${waktu%60} detik`;
 
             document.getElementById("tampil-nama-siswa").innerText = namaSiswa;
             document.getElementById("teks-token-tampil").innerText = token;
@@ -394,6 +538,8 @@
             
             document.getElementById("wadah-bukti").style.display = "block";
             document.getElementById("pesan-screenshot").style.display = "block";
+            
+            document.getElementById("btn-pembahasan").style.display = "block";
         }
 
         function acakArray(array) {
@@ -403,6 +549,50 @@
                 [arr[i], arr[j]] = [arr[j], arr[i]];
             }
             return arr;
+        }
+
+        function tampilkanPembahasanScreen() {
+            document.getElementById("layar-penutup").style.display = "none";
+            document.getElementById("layar-pembahasan").style.display = "block";
+            
+            const wadahPembahasan = document.getElementById("wadah-pembahasan-konten");
+            wadahPembahasan.innerHTML = "";
+            
+            dataSoal.forEach((soal, index) => {
+                let teksJawabanBenar = soal.pilihan.find(p => p.b === true).t;
+                
+                let htmlKonten = `
+                    <div class="item-pembahasan">
+                        <h4>Soal ${index + 1}</h4>
+                        <div class="teks-soal-pembahasan">${soal.teks.replace(/\n/g, '<br>')}</div>
+                        <div class="jawaban-benar">✔ Jawaban Benar: ${teksJawabanBenar}</div>
+                        <div class="teks-penjelasan">
+                            <strong>Penjelasan:</strong><br>${soal.pembahasan.replace(/\n/g, '<br>')}
+                        </div>
+                    </div>
+                `;
+                wadahPembahasan.innerHTML += htmlKonten;
+            });
+        }
+        
+        // --- FITUR BARU: KEMBALI KE AWAL ---
+        function tutupPembahasan() {
+            // Sembunyikan layar pembahasan dan tampilkan layar awal
+            document.getElementById("layar-pembahasan").style.display = "none";
+            document.getElementById("layar-awal").style.display = "block";
+            
+            // Kosongkan input nama
+            document.getElementById("input-nama").value = "";
+            
+            // Atur ulang variabel ke kondisi awal
+            indeksSoal = 0;
+            sisaDetik = DURASI_KUIS;
+            
+            // Acak ulang jawaban untuk persiapan jika latihan ingin diulang
+            dataSoal.forEach(soal => {
+                soal.pilihanAcak = acakArray(soal.pilihan); 
+                soal.jawabanDipilih = null; 
+            });
         }
     </script>
 </body>
